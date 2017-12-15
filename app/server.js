@@ -1,4 +1,3 @@
-
 const express = require('express');
 const app = express();
 const router = express.Router();
@@ -14,8 +13,7 @@ router.use((req, res, next) => {
 
 // Define route
 router.get('/', (req, res) => {
-  // throw new Error('Error Thrown'); // Testing error handler
-  res.send('Hello from express')
+  res.send({ text: 'Hello from express'});
 });
 
 // Error handler must be final use() and after routes
@@ -31,7 +29,7 @@ app.use('/', router);
 // Start server
 app.listen(port, (err) => {
   if (err) {
-    return console.log('App Error: ', err);
+    return console.log('Server Error: ', err);
   }
-  console.log(`server is listening on ${port}`);
+  console.log(`Server is listening on ${port}`);
 });
