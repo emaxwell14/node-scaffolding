@@ -1,25 +1,31 @@
 const express = require('express');
 const cors = require('cors');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+
+const dbService = require('./databaseService');
+const api = require('./src/route/index');
+const models = require('./src/model/index');
+
 const app = express();
 const router = express.Router();
 const port = process.env.API_PORT || 8080;
-console.log("port");
-console.log(port);
 
-app.use(cors());
-
+// DB connection
+dbService.init();
 
 // Define middleware
+app.use(cors());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
 router.use((req, res, next) => {
-  console.log('Request Received');
+  console.log('Request Received with path: ', req.originalUrl);
   next();
 });
 
-
-// Define route
-router.get('/', (req, res) => {
-  res.send({ text: 'Hello from express'});
-});
+// Define routes
+router.use(api.getRouter());
 
 // Error handler must be final use() and after routes
 router.use((err, req, res, next) => {
@@ -38,3 +44,4 @@ app.listen(port, (err) => {
   }
   console.log(`Server is listening on ${port}`);
 });
+
