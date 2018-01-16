@@ -11,10 +11,10 @@ module.exports = {
 };
 
 function getAll(req, res) {
-  Task.find({}, (err, task) => {
+  Task.find({}, (err, tasks) => {
     if (err)
       res.send(err);
-    res.json(task);
+    res.json(tasks);
   });
 };
 

@@ -7,7 +7,10 @@ const TaskSchema = new Schema({
     type: String,
     required: 'Please enter the name of the task'
   },
-  reated_date: {
+  description: {
+    type: String,
+  },
+  createdDate: {
     type: Date,
     default: Date.now
   },
