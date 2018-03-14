@@ -1,9 +1,9 @@
 const { GraphQLObjectType, GraphQLNonNull, GraphQLString } = require('graphql/type');
-const { todoType } = require('./todo');
+const { todoType, todoInputType } = require('./todo');
 const Task = require('../model/Todo');
 
 const mutation = new GraphQLObjectType({
-    name: 'TodoMutations',
+    name: 'TodoMutation',
     description: 'Mutations for todo lists',
     fields: () => ({
         deleteTodo: {
@@ -12,7 +12,20 @@ const mutation = new GraphQLObjectType({
             args: {
                 _id: { type: new GraphQLNonNull(GraphQLString) }
             },
-            resolve: (value, { _id }) => Task.remove({_id}, null)
+            resolve: (value, { _id }) => Task.remove({ _id })
+        },
+        updateTodo: {
+            type: todoType,
+            description: 'Add or update todo based on detection of ID.',
+            args: {
+                todo: { type: todoInputType }
+            },
+            resolve: (value, { todo }) => {
+                if (!todo._id) {
+                    return new Task(todo).save();
+                }
+                return Task.findOneAndUpdate({ _id: todo._id }, todo, { new: true });
+            }
         }
     }),
 });
