@@ -1,0 +1,57 @@
+{
+  "extends": "airbnb-base",
+  "env": {
+    "es6": true,
+    "node": true,
+    "mocha": true
+  },
+  "rules": {
+    "import/no-extraneous-dependencies": [
+      2,
+      {
+        "devDependencies": [
+          "src/**/*.spec.js"
+        ]
+      }
+    ],
+    "no-underscore-dangle": [
+      2,
+      {
+        "allow": [
+          "_id"
+        ],
+        "allowAfterThis": true
+      }
+    ],
+    "no-param-reassign": [
+      2,
+      {
+        "props": false
+      }
+    ],
+    "indent": [
+      2,
+      4,
+      {
+        "SwitchCase": 1
+      }
+    ],
+    "no-use-before-define": [
+      "error",
+      { "functions": false, "classes": true }
+    ],
+    "max-len": [
+      2,
+      120
+    ],
+    "object-curly-newline": [
+      0
+    ],
+    "function-paren-newline": [
+      0
+    ],
+    "prefer-destructuring": [
+      0
+    ]
+  }
+}

@@ -4,7 +4,7 @@ const statusEnumType = new GraphQLEnumType({
     name: 'StatusEnum',
     description: 'The status of the todo.',
     values: {
-        pending: { value: "pending" },
+        pending: { value: 'pending' },
         ongoing: { value: 'ongoing' },
         completed: { value: 'completed' },
     },
@@ -28,7 +28,7 @@ const todoType = new GraphQLObjectType({
         },
         createdDate: {
             type: GraphQLString,
-            description: 'The created date of the todo'
+            description: 'The created date of the todo',
         },
         status: {
             type: statusEnumType,
@@ -50,7 +50,7 @@ const todoInputType = new GraphQLInputObjectType({
         },
         createdDate: {
             type: GraphQLString,
-            description: 'The created date of the todo'
+            description: 'The created date of the todo',
         },
         status: {
             type: statusEnumType,
@@ -62,4 +62,4 @@ const todoInputType = new GraphQLInputObjectType({
 module.exports = {
     todoType,
     todoInputType,
-}
+};

@@ -1,11 +1,8 @@
 const express = require('express');
 const cors = require('cors');
-const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-
 const dbService = require('./databaseService');
 const api = require('./src/route/index');
-const models = require('./src/model/index');
 
 const app = express();
 const router = express.Router();
@@ -20,17 +17,17 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 router.use((req, res, next) => {
-  console.log('Request Received with path: ', req.originalUrl);
-  next();
+    console.log('Request Received with path: ', req.originalUrl);
+    next();
 });
 
 // Define routes
 router.use(api.getRouter());
 
 // Error handler must be final use() and after routes
-router.use((err, req, res, next) => {
-  console.log('Error handler: ', err);
-  res.status(500).send('Server Error');
+router.use((err, req, res) => {
+    console.log('Error handler: ', err);
+    res.status(500).send('Server Error');
 });
 
 
@@ -39,9 +36,8 @@ app.use('/', router);
 
 // Start server
 app.listen(port, (err) => {
-  if (err) {
-    return console.log('Server Error: ', err);
-  }
-  console.log(`Server is listening on ${port}`);
+    if (err) {
+        console.log('Server Error: ', err);
+    }
+    console.log(`Server is listening on ${port}`);
 });
-

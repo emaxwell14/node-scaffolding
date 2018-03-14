@@ -1,5 +1,5 @@
 const express = require('express');
-const express_graphql = require('express-graphql');
+const expressGraphql = require('express-graphql');
 const { schema } = require('./src/graphql/schema');
 const dbService = require('./databaseService');
 
@@ -11,11 +11,11 @@ dbService.init();
 
 // Create an express server and a GraphQL endpoint
 const app = express();
-app.use(endpoint, express_graphql({
+app.use(endpoint, expressGraphql({
     schema,
     graphiql: process.env.ENVIRONMENT !== 'PROD',
 }));
 
 app.listen(port, () =>
-    console.log(`Server running on localhost:${port}${endpoint}`)
+    console.log(`Server running on localhost:${port}${endpoint}`),
 );

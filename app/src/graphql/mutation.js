@@ -10,23 +10,23 @@ const mutation = new GraphQLObjectType({
             type: todoType,
             description: 'Delete an todo with id.',
             args: {
-                _id: { type: new GraphQLNonNull(GraphQLString) }
+                _id: { type: new GraphQLNonNull(GraphQLString) },
             },
-            resolve: (value, { _id }) => Task.remove({ _id })
+            resolve: (value, { _id }) => Task.remove({ _id }),
         },
         updateTodo: {
             type: todoType,
             description: 'Add or update todo based on detection of ID.',
             args: {
-                todo: { type: todoInputType }
+                todo: { type: todoInputType },
             },
             resolve: (value, { todo }) => {
                 if (!todo._id) {
                     return new Task(todo).save();
                 }
                 return Task.findOneAndUpdate({ _id: todo._id }, todo, { new: true });
-            }
-        }
+            },
+        },
     }),
 });
 
