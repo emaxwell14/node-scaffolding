@@ -5,6 +5,7 @@ const dbService = require('./databaseService');
 
 const port = process.env.API_PORT || 8080;
 const endpoint = '/graphql';
+const isProd = process.env.ENVIRONMENT === 'PROD';
 
 // DB connection
 dbService.init();
@@ -13,7 +14,7 @@ dbService.init();
 const app = express();
 app.use(endpoint, expressGraphql({
     schema,
-    graphiql: process.env.ENVIRONMENT !== 'PROD',
+    graphiql: !isProd,
 }));
 
 app.listen(port, () =>

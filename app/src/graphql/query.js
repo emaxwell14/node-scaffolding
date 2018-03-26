@@ -11,7 +11,7 @@ const query = new GraphQLObjectType({
                 _id: { type: new GraphQLNonNull(GraphQLString) },
             },
             // TODO if none found, return error or null.
-            resolve: (value, { _id }) => Task.findById({ _id }),
+            resolve: (_, { _id }) => Task.findById({ _id }),
         },
         getTasks: {
             type: new GraphQLList(todoType),

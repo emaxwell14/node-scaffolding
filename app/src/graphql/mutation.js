@@ -12,7 +12,7 @@ const mutation = new GraphQLObjectType({
             args: {
                 _id: { type: new GraphQLNonNull(GraphQLString) },
             },
-            resolve: (value, { _id }) => Task.remove({ _id }),
+            resolve: (_, { _id }) => Task.remove({ _id }),
         },
         updateTodo: {
             type: todoType,
@@ -20,7 +20,7 @@ const mutation = new GraphQLObjectType({
             args: {
                 todo: { type: todoInputType },
             },
-            resolve: (value, { todo }) => {
+            resolve: (_, { todo }) => {
                 if (!todo._id) {
                     return new Task(todo).save();
                 }
