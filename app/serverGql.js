@@ -1,5 +1,6 @@
 const express = require('express');
 const expressGraphql = require('express-graphql');
+const cors = require('cors');
 const { schema } = require('./src/graphql/schema');
 const dbService = require('./databaseService');
 
@@ -12,6 +13,9 @@ dbService.init();
 
 // Create an express server and a GraphQL endpoint
 const app = express();
+
+// Define middleware
+app.use(cors());
 app.use(endpoint, expressGraphql({
     schema,
     graphiql: !isProd,

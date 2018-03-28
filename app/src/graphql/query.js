@@ -5,7 +5,7 @@ const { todoType } = require('./todo');
 const query = new GraphQLObjectType({
     name: 'TodoQuery',
     fields: {
-        getTask: {
+        task: {
             type: todoType,
             args: {
                 _id: { type: new GraphQLNonNull(GraphQLString) },
@@ -13,7 +13,7 @@ const query = new GraphQLObjectType({
             // TODO if none found, return error or null.
             resolve: (_, { _id }) => Task.findById({ _id }),
         },
-        getTasks: {
+        tasks: {
             type: new GraphQLList(todoType),
             resolve: () => Task.find({}),
         },
