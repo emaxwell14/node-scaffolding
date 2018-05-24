@@ -1,6 +1,8 @@
+/* eslint-disable no-console */
 const express = require('express');
 const expressGraphql = require('express-graphql');
 const cors = require('cors');
+const chalk = require('chalk');
 const { schema } = require('./src/graphql/schema');
 const dbService = require('./databaseService');
 
@@ -22,5 +24,5 @@ app.use(endpoint, expressGraphql({
 }));
 
 app.listen(port, () =>
-    console.log(`Server running on localhost:${port}${endpoint}`),
+    console.log(chalk.blue(`Server running on localhost:${port}${endpoint}`)),
 );

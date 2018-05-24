@@ -6,7 +6,7 @@ const mutation = new GraphQLObjectType({
     name: 'TodoMutation',
     description: 'Mutations for todo lists',
     fields: () => ({
-        deleteTodo: {
+        deleteTask: {
             type: todoType,
             description: 'Delete an todo with id.',
             args: {
@@ -14,11 +14,11 @@ const mutation = new GraphQLObjectType({
             },
             resolve: (_, { _id }) => Task.remove({ _id }),
         },
-        updateTodo: {
+        updateTask: {
             type: todoType,
             description: 'Add or update todo based on detection of ID.',
             args: {
-                todo: { type: todoInputType },
+                task: { type: todoInputType },
             },
             resolve: (_, { todo }) => {
                 if (!todo._id) {

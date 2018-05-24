@@ -1,8 +1,12 @@
+/* eslint-disable no-console */
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const chalk = require('chalk');
 const dbService = require('./databaseService');
 const api = require('./src/route/index');
+require('mongoose');
+require('./src/model/index');
 
 const app = express();
 const router = express.Router();
@@ -17,7 +21,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 router.use((req, res, next) => {
-    console.log('Request Received with path: ', req.originalUrl);
+    console.log(chalk.green('Request Received with path: ', req.originalUrl));
     next();
 });
 
@@ -26,7 +30,7 @@ router.use(api.getRouter());
 
 // Error handler must be final use() and after routes
 router.use((err, req, res) => {
-    console.log('Error handler: ', err);
+    console.log(chalk.red('Error handler: '), err);
     res.status(500).send('Server Error');
 });
 
@@ -37,7 +41,7 @@ app.use('/', router);
 // Start server
 app.listen(port, (err) => {
     if (err) {
-        console.log('Server Error: ', err);
+        console.log(chalk.red('Server Error: '), err);
     }
-    console.log(`Server is listening on ${port}`);
+    console.log(chalk.blue(`Server is listening on ${port}`));
 });

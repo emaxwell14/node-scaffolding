@@ -1,4 +1,6 @@
+/* eslint-disable no-console */
 const mongoose = require('mongoose');
+const chalk = require('chalk');
 
 const dbName = process.env.DB_NAME || 'node-scaffolding';
 
@@ -10,10 +12,10 @@ function init() {
     mongoose.promise = global.Promise;
     mongoose.connect(`mongodb://localhost/${dbName}`)
         .then(() =>
-            console.log('Connected to MongoDB successfully!'),
+            console.log(chalk.blue('Connected to MongoDB successfully!')),
         )
         .catch((err) => {
-            console.log('MongoDB connection error!');
+            console.log(chalk.red('MongoDB connection error!'));
             throw err;
         });
 }

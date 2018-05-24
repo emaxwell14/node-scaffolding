@@ -22,11 +22,12 @@
   "homepage": "https://github.com/emaxwell14/node-scaffolding#readme",
   "dependencies": {
     "body-parser": "^1.18.2",
+    "chalk": "^2.3.2",
     "cors": "^2.8.4",
     "express": "^4.16.2",
     "express-graphql": "^0.6.12",
     "graphql": "^0.13.1",
-    "mongoose": "4.13.7",
+    "mongoose": "^5.0.12",
     "nodemon": "^1.12.7"
   },
   "devDependencies": {
