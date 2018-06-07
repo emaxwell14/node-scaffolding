@@ -1,4 +1,5 @@
-const { GraphQLObjectType, GraphQLString, GraphQLEnumType, GraphQLInputObjectType } = require('graphql/type');
+const { GraphQLObjectType, GraphQLString, GraphQLEnumType, GraphQLInputObjectType, GraphQLID,
+} = require('graphql/type');
 
 const statusEnumType = new GraphQLEnumType({
     name: 'StatusEnum',
@@ -15,7 +16,7 @@ const todoType = new GraphQLObjectType({
     description: 'todo item',
     fields: () => ({
         _id: {
-            type: GraphQLString,
+            type: GraphQLID,
             description: 'The mongo id of the todo.',
         },
         name: {

@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 const express = require('express');
-const expressGraphql = require('express-graphql');
+const expressGraphql = require('express-graphql'); // apollo-server-express?
 const cors = require('cors');
 const chalk = require('chalk');
 const { schema } = require('./src/graphql/schema');

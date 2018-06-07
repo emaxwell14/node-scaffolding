@@ -18,13 +18,14 @@ const mutation = new GraphQLObjectType({
             type: todoType,
             description: 'Add or update todo based on detection of ID.',
             args: {
+                _id: { type: GraphQLString },
                 task: { type: todoInputType },
             },
-            resolve: (_, { todo }) => {
-                if (!todo._id) {
-                    return new Task(todo).save();
+            resolve: (_, { _id, task }) => {
+                if (!_id) {
+                    return Task.create(task);
                 }
-                return Task.findOneAndUpdate({ _id: todo._id }, todo, { new: true });
+                return Task.findOneAndUpdate({ _id }, { ...task, _id }, { new: true });
             },
         },
     }),
