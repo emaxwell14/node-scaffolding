@@ -23,9 +23,10 @@ const mutation = new GraphQLObjectType({
             },
             resolve: (_, { _id, task }) => {
                 if (!_id) {
-                    return Task.create(task);
+                    return Task.create(task, e => console.log('ERROR ON CREATE: ', e));
                 }
-                return Task.findOneAndUpdate({ _id }, { ...task, _id }, { new: true });
+                return Task.findOneAndUpdate({ _id }, { ...task, _id }, { new: true },
+                    e => console.log('ERROR ON CREATE: ', e));
             },
         },
     }),

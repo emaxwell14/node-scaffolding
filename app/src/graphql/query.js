@@ -11,11 +11,11 @@ const query = new GraphQLObjectType({
                 _id: { type: new GraphQLNonNull(GraphQLString) },
             },
             // TODO if none found, return error or null.
-            resolve: (_, { _id }) => Task.findById({ _id }),
+            resolve: (_, { _id }) => Task.findById({ _id }, e => console.log('ERROR ON QUERY: ', e)),
         },
         tasks: {
             type: new GraphQLList(todoType),
-            resolve: () => Task.find({}),
+            resolve: () => Task.find({}, e => console.log('ERROR ON QUERY: ', e)),
         },
     },
 });

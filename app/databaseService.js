@@ -10,6 +10,8 @@ module.exports = {
 
 function init() {
     mongoose.promise = global.Promise;
+    const isProd = process.env.ENVIRONMENT === 'PROD';
+    mongoose.set('debug', !isProd);
     mongoose.connect(`mongodb://localhost/${dbName}`)
         .then(() =>
             console.log(chalk.blue('Connected to MongoDB successfully!')),
