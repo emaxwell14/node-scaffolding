@@ -1,43 +1,34 @@
-const { GraphQLObjectType, GraphQLNonNull, GraphQLString } = require('graphql/type');
-const { todoType, todoInputType } = require('./TaskType');
+const { GraphQLObjectType, GraphQLNonNull } = require('graphql/type');
+const TaskInput = require('./TaskInput');
+const TaskPayload = require('./TaskPayload');
 const Task = require('../model/Todo');
 
 const mutation = new GraphQLObjectType({
-    name: 'TodoMutation',
-    description: 'Mutations for todo lists',
+    name: 'Mutation',
     fields: () => ({
-        deleteTask: {
-            type: todoType,
-            description: 'Delete an todo with id.',
+        addTask: {
+            type: TaskPayload,
+            description: 'Add a task',
             args: {
-                _id: { type: new GraphQLNonNull(GraphQLString) },
+                input: {
+                    type: new GraphQLNonNull(TaskInput),
+                },
             },
-            resolve: (_, { _id }) => Task.remove({ _id }).catch(() => {
-                throw new Error('Error deleting task');
-            }),
-        },
-        updateTask: {
-            type: todoType,
-            description: 'Add or update todo based on detection of ID.',
-            args: {
-                _id: { type: GraphQLString },
-                task: { type: todoInputType },
+            resolve: (_, { input: { name, description, clientMutationId } }) => {
+                const createdTask = new Task();
+                createdTask.name = name;
+                createdTask.description = description;
+
+                return Task.create(createdTask).then(task => ({
+                    clientMutationId,
+                    task,
+                })).catch(() => {
+                    throw new Error('Error creating task');
+                });
             },
-            resolve: (_, { _id, task }) => {
-                if (!_id) {
-                    return Task.create(task).catch(() => {
-                        throw new Error('Error creating task');
-                    });
-                }
-                return Task.findOneAndUpdate({ _id }, { ...task, _id }, { new: true })
-                    .catch(() => {
-                        throw new Error(`Error updating task with id ${_id}`);
-                    });
-            },
+
         },
     }),
 });
 
-module.exports = {
-    mutation,
-};
+module.exports = mutation;
