@@ -1,7 +1,6 @@
 const { GraphQLObjectType, GraphQLNonNull, GraphQLString } = require('graphql/type');
 const { todoType, todoInputType } = require('./todo');
 const Task = require('../model/Todo');
-const logger = require('../utils/logger');
 
 const mutation = new GraphQLObjectType({
     name: 'TodoMutation',
@@ -13,7 +12,9 @@ const mutation = new GraphQLObjectType({
             args: {
                 _id: { type: new GraphQLNonNull(GraphQLString) },
             },
-            resolve: (_, { _id }) => Task.remove({ _id }),
+            resolve: (_, { _id }) => Task.remove({ _id }).catch(() => {
+                throw new Error('Error deleting task');
+            }),
         },
         updateTask: {
             type: todoType,
@@ -24,10 +25,14 @@ const mutation = new GraphQLObjectType({
             },
             resolve: (_, { _id, task }) => {
                 if (!_id) {
-                    return Task.create(task, e => logger.error('ERROR ON CREATE: ', e));
+                    return Task.create(task).catch(() => {
+                        throw new Error('Error creating task');
+                    });
                 }
-                return Task.findOneAndUpdate({ _id }, { ...task, _id }, { new: true },
-                    e => logger.error('ERROR ON CREATE: ', e));
+                return Task.findOneAndUpdate({ _id }, { ...task, _id }, { new: true })
+                    .catch(() => {
+                        throw new Error(`Error updating task with id ${_id}`);
+                    });
             },
         },
     }),

@@ -1,7 +1,7 @@
 const { GraphQLObjectType, GraphQLNonNull, GraphQLString, GraphQLList } = require('graphql/type');
 const Task = require('../model/Todo');
 const { todoType } = require('./todo');
-const logger = require('../utils/logger');
+const NotFoundException = require('../errors/NotFoundError');
 
 const query = new GraphQLObjectType({
     name: 'TodoQuery',
@@ -11,12 +11,17 @@ const query = new GraphQLObjectType({
             args: {
                 _id: { type: new GraphQLNonNull(GraphQLString) },
             },
-            // TODO if none found, return error or null.
-            resolve: (_, { _id }) => Task.findById({ _id }, e => logger.error('ERROR ON QUERY: ', e)),
+            resolve: (_, { _id }) => Task.findById({ _id })
+                .catch(() => {
+                    throw new NotFoundException(`Task not found with id ${_id}`);
+                }),
         },
         tasks: {
             type: new GraphQLList(todoType),
-            resolve: () => Task.find({}, e => logger.error('ERROR ON QUERY: ', e)),
+            resolve: () => Task.find({})
+                .catch(() => {
+                    throw new NotFoundException('Error when retrieving tasks');
+                }),
         },
     },
 });

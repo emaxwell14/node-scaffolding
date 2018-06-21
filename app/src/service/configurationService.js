@@ -15,5 +15,5 @@ function getServerPort() {
 }
 
 function getEnvironment() {
-    return process.env.ENVIRONMENT || 'dev';
+    return process.env.NODE_ENV || 'dev';
 }
