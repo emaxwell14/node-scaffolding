@@ -1,5 +1,5 @@
 const { GraphQLObjectType, GraphQLNonNull, GraphQLString } = require('graphql/type');
-const { todoType, todoInputType } = require('./todo');
+const { todoType, todoInputType } = require('./TaskType');
 const Task = require('../model/Todo');
 
 const mutation = new GraphQLObjectType({

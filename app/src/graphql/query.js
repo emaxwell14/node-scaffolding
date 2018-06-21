@@ -1,31 +1,34 @@
-const { GraphQLObjectType, GraphQLNonNull, GraphQLString, GraphQLList } = require('graphql/type');
+const { GraphQLObjectType, GraphQLNonNull, GraphQLID } = require('graphql/type');
+const { fromGlobalId } = require('graphql-relay');
 const Task = require('../model/Todo');
-const { todoType } = require('./todo');
+const TaskType = require('./TaskType');
 const NotFoundException = require('../errors/NotFoundError');
+const { node, nodes } = require('./relayNode');
 
 const query = new GraphQLObjectType({
-    name: 'TodoQuery',
+    name: 'Query',
     fields: {
         task: {
-            type: todoType,
+            name: 'task',
+            description: 'Get task by id',
+            type: TaskType,
             args: {
-                _id: { type: new GraphQLNonNull(GraphQLString) },
+                id: {
+                    type: new GraphQLNonNull(GraphQLID),
+                },
             },
-            resolve: (_, { _id }) => Task.findById({ _id })
-                .catch(() => {
-                    throw new NotFoundException(`Task not found with id ${_id}`);
-                }),
+            resolve: (root, { id: _id }) => {
+                // TODO handle global id
+                // const { id: _id } = fromGlobalId(relayId);
+                return Task.findById({ _id })
+                    . catch(() => {
+                        throw new NotFoundException(`Task not found with id ${_id}`);
+                    });
+            },
         },
-        tasks: {
-            type: new GraphQLList(todoType),
-            resolve: () => Task.find({})
-                .catch(() => {
-                    throw new NotFoundException('Error when retrieving tasks');
-                }),
-        },
+        node,
+        nodes,
     },
 });
 
-module.exports = {
-    query,
-};
+module.exports = query;
