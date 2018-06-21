@@ -1,14 +1,13 @@
 {
-  "name": "app",
+  "name": "node-scaffolding",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
   "scripts": {
     "test": "test",
-    "start": "nodemon server.js",
-    "startGql": "nodemon serverGql.js",
-    "startGql:debug": "nodemon %NODE_DEBUG_OPTION% serverGql.js",
-    "lint": "esw"
+    "start": "nodemon server.js | bunyan",
+    "startGql:debug": "nodemon %NODE_DEBUG_OPTION% server.js | bunyan",
+    "lint": "esw --fix --color src/"
   },
   "repository": {
     "type": "git",
@@ -22,6 +21,7 @@
   "homepage": "https://github.com/emaxwell14/node-scaffolding#readme",
   "dependencies": {
     "body-parser": "^1.18.2",
+    "bunyan": "1.8.12",
     "chalk": "^2.3.2",
     "cors": "^2.8.4",
     "express": "^4.16.2",

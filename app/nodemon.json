@@ -1,0 +1,24 @@
+{
+  "restartable": "rs",
+  "events": {
+    "restart": "echo 'display notification \"App restarted due to:\n'$FILENAME'\" with title \"nodemon\"'"
+  },
+  "watch": [
+    "node_modules/",
+    "src/"
+  ],
+  "ignore": [
+    ".git",
+    ".tmp/",
+    "buildscripts"
+  ],
+  "env": {
+    "LOG_LEVEL": "debug"
+  },
+  "options": {
+    "extensions": [
+      "js"
+    ],
+    "exec": "node"
+  }
+}
