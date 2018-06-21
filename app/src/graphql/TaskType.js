@@ -1,4 +1,4 @@
-const { GraphQLObjectType, GraphQLString, GraphQLEnumType, GraphQLID } = require('graphql/type');
+const { GraphQLObjectType, GraphQLString, GraphQLEnumType } = require('graphql/type');
 const { globalIdField } = require('graphql-relay');
 
 const statusEnumType = new GraphQLEnumType({
@@ -15,12 +15,7 @@ const TaskType = new GraphQLObjectType({
     name: 'Task',
     description: 'todo item',
     fields: () => ({
-        // TODO handle global id
-        // id: globalIdField('task'),
-        _id: {
-            type: GraphQLID,
-            description: 'The mongo id of the todo.',
-        },
+        id: globalIdField('task'),
         name: {
             type: GraphQLString,
             description: 'The name of the todo.',

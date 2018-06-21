@@ -17,9 +17,8 @@ const query = new GraphQLObjectType({
                     type: new GraphQLNonNull(GraphQLID),
                 },
             },
-            resolve: (root, { id: _id }) => {
-                // TODO handle global id
-                // const { id: _id } = fromGlobalId(relayId);
+            resolve: (root, { id }) => {
+                const { id: _id } = fromGlobalId(id);
                 return Task.findById({ _id })
                     . catch(() => {
                         throw new NotFoundException(`Task not found with id ${_id}`);

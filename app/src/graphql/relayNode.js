@@ -4,7 +4,6 @@ const Task = require('../model/Todo');
 
 const { nodeInterface, nodeField: node, nodesField: nodes } = nodeDefinitions(
     (globalId) => {
-        // TODO handle global id
         const { type, id: _id } = fromGlobalId(globalId);
 
         switch (type) {
