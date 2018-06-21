@@ -1,24 +1,10 @@
-/*
- * Author: Alexandre Havrileck (Oxyno-zeta)
- * Date: 05/11/17
- * Licence: See Readme
- */
 
-/* ************************************* */
-/* ********       IMPORTS       ******** */
-/* ************************************* */
 const { nodeDefinitions, fromGlobalId } = require('graphql-relay');
 const Task = require('../model/Todo');
 
-/* ************************************* */
-/* ********      VARIABLES      ******** */
-/* ************************************* */
-
-/* ************************************* */
-/* ********       CLASSES       ******** */
-/* ************************************* */
 const { nodeInterface, nodeField: node, nodesField: nodes } = nodeDefinitions(
     (globalId) => {
+        // TODO handle global id
         const { type, id: _id } = fromGlobalId(globalId);
 
         switch (type) {
@@ -40,20 +26,9 @@ const { nodeInterface, nodeField: node, nodesField: nodes } = nodeDefinitions(
     },
 );
 
-/* ************************************* */
-/* ********       EXPORTS       ******** */
-/* ************************************* */
 module.exports = { nodeInterface, node, nodes };
 
-/* ************************************* */
-/* ********  PRIVATE FUNCTIONS  ******** */
-
-/* ************************************* */
 function getType(obj) {
     // eslint-disable-next-line no-underscore-dangle
     return obj ? obj.__type : undefined;
 }
-
-/* ************************************* */
-/* ********   PUBLIC FUNCTIONS  ******** */
-/* ************************************* */
