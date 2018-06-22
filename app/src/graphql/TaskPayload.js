@@ -1,7 +1,7 @@
 const { GraphQLObjectType, GraphQLString, GraphQLNonNull } = require('graphql/type');
 const TaskType = require('./TaskType');
 
-const TaskPayload = new GraphQLObjectType({
+module.exports = new GraphQLObjectType({
     name: 'TaskPayload',
     fields: () => ({
         clientMutationId: {
@@ -14,5 +14,3 @@ const TaskPayload = new GraphQLObjectType({
         },
     }),
 });
-
-module.exports = TaskPayload;

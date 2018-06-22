@@ -4,7 +4,7 @@ const Task = require('../model/Todo');
 const TaskType = require('./TaskType');
 const { node, nodes } = require('./relayNode');
 
-const query = new GraphQLObjectType({
+module.exports = new GraphQLObjectType({
     name: 'Query',
     fields: {
         task: {
@@ -37,5 +37,3 @@ const query = new GraphQLObjectType({
         nodes,
     },
 });
-
-module.exports = query;

@@ -1,9 +1,11 @@
 const { GraphQLObjectType, GraphQLNonNull } = require('graphql/type');
+const { fromGlobalId } = require('graphql-relay');
 const TaskInput = require('./TaskInput');
+const EditTaskInput = require('./EditTaskInput');
 const TaskPayload = require('./TaskPayload');
 const Task = require('../model/Todo');
 
-const mutation = new GraphQLObjectType({
+module.exports = new GraphQLObjectType({
     name: 'Mutation',
     fields: () => ({
         addTask: {
@@ -15,9 +17,7 @@ const mutation = new GraphQLObjectType({
                 },
             },
             resolve: (_, { input: { name, description, clientMutationId } }) => {
-                const createdTask = new Task();
-                createdTask.name = name;
-                createdTask.description = description;
+                const createdTask = new Task({ name, description });
 
                 return Task.create(createdTask).then(task => ({
                     clientMutationId,
@@ -26,9 +26,28 @@ const mutation = new GraphQLObjectType({
                     throw new Error('Error creating task');
                 });
             },
+        },
+        editTask: {
+            type: TaskPayload,
+            description: 'Add a task',
+            args: {
+                input: {
+                    type: new GraphQLNonNull(EditTaskInput),
+                },
+            },
+            resolve: (_, { input: { id, name, description, status, clientMutationId } }) => {
+                const { id: _id } = fromGlobalId(id);
+                const taskToEdit = new Task({ _id, name, description, status });
+
+                return Task.findOneAndUpdate({ _id }, taskToEdit, { new: true }).then(task => ({
+                    clientMutationId,
+                    task,
+                })).catch(() => {
+                    throw new Error('Error editing task');
+                });
+            },
 
         },
     }),
 });
 
-module.exports = mutation;

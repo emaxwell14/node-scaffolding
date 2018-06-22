@@ -1,18 +1,9 @@
-const { GraphQLObjectType, GraphQLString, GraphQLEnumType } = require('graphql/type');
+const { GraphQLObjectType, GraphQLString } = require('graphql/type');
 const { globalIdField } = require('graphql-relay');
 const { nodeInterface } = require('./relayNode');
+const StatusEnumType = require('./StatusEnumType');
 
-const statusEnumType = new GraphQLEnumType({
-    name: 'StatusEnum',
-    description: 'The status of the todo.',
-    values: {
-        pending: { value: 'pending' },
-        ongoing: { value: 'ongoing' },
-        completed: { value: 'completed' },
-    },
-});
-
-const TaskType = new GraphQLObjectType({
+module.exports = new GraphQLObjectType({
     name: 'Task',
     description: 'todo item',
     fields: () => ({
@@ -30,10 +21,8 @@ const TaskType = new GraphQLObjectType({
             description: 'The created date of the todo',
         },
         status: {
-            type: statusEnumType,
+            type: StatusEnumType,
         },
     }),
     interfaces: [nodeInterface],
 });
-
-module.exports = TaskType;
