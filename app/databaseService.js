@@ -3,14 +3,9 @@ const mongoose = require('mongoose');
 const logger = require('./src/utils/logger');
 const configurationService = require('./src/service/configurationService');
 
-const dbName = process.env.DB_NAME || 'node-scaffolding';
-
-module.exports = {
-    init,
-};
-
 function init() {
     const isProd = configurationService.getEnvironment() === 'dev';
+    const dbName = configurationService.getDatabaseName();
 
     mongoose.promise = global.Promise;
     mongoose.set('debug', !isProd);
@@ -23,3 +18,7 @@ function init() {
             throw err;
         });
 }
+
+module.exports = {
+    init,
+};

@@ -3,6 +3,7 @@ module.exports = {
     getServerPort,
     getLogLevel,
     getEnvironment,
+    getDatabaseName,
 };
 
 
@@ -16,4 +17,7 @@ function getServerPort() {
 
 function getEnvironment() {
     return process.env.NODE_ENV || 'dev';
+}
+function getDatabaseName() {
+    return process.env.DB_NAME || 'node-scaffolding';
 }

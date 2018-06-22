@@ -1,5 +1,7 @@
-const Todo = require('./Task');
+const Task = require('./Task');
+const User = require('./User');
 
 module.exports = {
-    Todo,
+    Task,
+    User,
 };

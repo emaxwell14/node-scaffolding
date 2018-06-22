@@ -1,6 +1,6 @@
 const { GraphQLNonNull, GraphQLID, GraphQLList } = require('graphql/type');
 const { fromGlobalId } = require('graphql-relay');
-const Task = require('../../model/Task');
+const { Task } = require('../../model/index');
 const TaskType = require('./TaskType');
 
 const task = {

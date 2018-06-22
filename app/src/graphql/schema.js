@@ -1,5 +1,6 @@
 const { GraphQLSchema, GraphQLObjectType } = require('graphql/type');
-const { query, mutation } = require('./task/index');
+const { taskQuery, taskMutation } = require('./task/index');
+const { userQuery } = require('./user/index');
 const { node, nodes } = require('./relayNode');
 
 module.exports = new GraphQLSchema({
@@ -8,13 +9,14 @@ module.exports = new GraphQLSchema({
         fields: {
             node,
             nodes,
-            ...query,
+            ...taskQuery,
+            ...userQuery,
         },
     }),
     mutation: new GraphQLObjectType({
         name: 'Mutation',
         fields: {
-            ...mutation,
+            ...taskMutation,
         },
     }),
 });

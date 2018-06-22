@@ -3,7 +3,7 @@ const { fromGlobalId } = require('graphql-relay');
 const TaskInput = require('./TaskInput');
 const EditTaskInput = require('./EditTaskInput');
 const TaskPayload = require('./TaskPayload');
-const Task = require('../../model/Task');
+const { Task } = require('../../model/index');
 
 const addTask = {
     type: TaskPayload,
