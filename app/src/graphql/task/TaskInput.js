@@ -5,15 +5,15 @@ module.exports = new GraphQLInputObjectType({
     fields: () => ({
         clientMutationId: {
             type: new GraphQLNonNull(GraphQLString),
-            description: 'The relay mutation id.',
+            description: 'The relay mutation id',
         },
         name: {
             type: GraphQLString,
-            description: 'The name of the task.',
+            description: 'The name of the task',
         },
         description: {
             type: GraphQLString,
-            description: 'The description of the task.',
+            description: 'The description of the task',
         },
     }),
 });

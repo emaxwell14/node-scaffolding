@@ -6,19 +6,19 @@ module.exports = new GraphQLInputObjectType({
     fields: () => ({
         clientMutationId: {
             type: new GraphQLNonNull(GraphQLString),
-            description: 'The relay mutation id.',
+            description: 'The relay mutation id',
         },
         id: {
             type: new GraphQLNonNull(GraphQLID),
-            description: 'The global id of the task.',
+            description: 'The global id of the task',
         },
         name: {
             type: GraphQLString,
-            description: 'The name of the task.',
+            description: 'The name of the task',
         },
         description: {
             type: GraphQLString,
-            description: 'The description of the task.',
+            description: 'The description of the task',
         },
         status: {
             type: StatusEnumType,

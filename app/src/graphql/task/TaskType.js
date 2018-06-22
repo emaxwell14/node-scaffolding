@@ -1,6 +1,6 @@
 const { GraphQLObjectType, GraphQLString } = require('graphql/type');
 const { globalIdField } = require('graphql-relay');
-const { nodeInterface } = require('./relayNode');
+const { nodeInterface } = require('../relayNode');
 const StatusEnumType = require('./StatusEnumType');
 
 module.exports = new GraphQLObjectType({
@@ -10,11 +10,11 @@ module.exports = new GraphQLObjectType({
         id: globalIdField('task'),
         name: {
             type: GraphQLString,
-            description: 'The name of the task.',
+            description: 'The name of the task',
         },
         description: {
             type: GraphQLString,
-            description: 'The description of the task.',
+            description: 'The description of the task',
         },
         createdDate: {
             type: GraphQLString,

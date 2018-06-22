@@ -17,7 +17,7 @@ const { nodeInterface, nodeField: node, nodesField: nodes } = nodeDefinitions(
         switch (getType(obj)) {
             /* eslint-disable global-require */
             case 'Task':
-                return require('./TaskType');
+                return require('./task/index').TaskType;
             default:
                 return null;
             /* eslint-enable */
