@@ -1,8 +1,7 @@
-const { GraphQLObjectType, GraphQLNonNull, GraphQLID } = require('graphql/type');
+const { GraphQLObjectType, GraphQLNonNull, GraphQLID, GraphQLList } = require('graphql/type');
 const { fromGlobalId } = require('graphql-relay');
 const Task = require('../model/Todo');
 const TaskType = require('./TaskType');
-const NotFoundException = require('../errors/NotFoundError');
 const { node, nodes } = require('./relayNode');
 
 const query = new GraphQLObjectType({
@@ -20,10 +19,19 @@ const query = new GraphQLObjectType({
             resolve: (root, { id }) => {
                 const { id: _id } = fromGlobalId(id);
                 return Task.findById({ _id })
-                    . catch(() => {
-                        throw new NotFoundException(`Task not found with id ${_id}`);
+                    .catch(() => {
+                        throw new Error(`Error searching for task with id ${_id}`);
                     });
             },
+        },
+        tasks: {
+            name: 'tasks',
+            description: 'Get all tasks',
+            type: new GraphQLList(TaskType),
+            resolve: () => Task.find()
+                .catch(() => {
+                    throw new Error('Error searching for tasks');
+                }),
         },
         node,
         nodes,
