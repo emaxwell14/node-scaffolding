@@ -19,6 +19,11 @@ const TaskSchema = new Schema({
         enum: ['pending', 'ongoing', 'completed'],
         default: 'pending',
     },
+    // Used for graphql node query
+    type: {
+        type: String,
+        default: 'Task',
+    },
 });
 
 module.exports = mongoose.model('Tasks', TaskSchema);

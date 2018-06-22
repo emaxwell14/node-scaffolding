@@ -1,5 +1,6 @@
 const { GraphQLObjectType, GraphQLString, GraphQLEnumType } = require('graphql/type');
 const { globalIdField } = require('graphql-relay');
+const { nodeInterface } = require('./relayNode');
 
 const statusEnumType = new GraphQLEnumType({
     name: 'StatusEnum',
@@ -32,6 +33,7 @@ const TaskType = new GraphQLObjectType({
             type: statusEnumType,
         },
     }),
+    interfaces: [nodeInterface],
 });
 
 module.exports = TaskType;

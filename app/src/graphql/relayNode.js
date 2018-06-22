@@ -28,6 +28,5 @@ const { nodeInterface, nodeField: node, nodesField: nodes } = nodeDefinitions(
 module.exports = { nodeInterface, node, nodes };
 
 function getType(obj) {
-    // eslint-disable-next-line no-underscore-dangle
-    return obj ? obj.__type : undefined;
+    return obj ? obj.type : undefined;
 }
