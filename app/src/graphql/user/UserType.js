@@ -9,19 +9,19 @@ module.exports = new GraphQLObjectType({
         id: globalIdField('user'),
         name: {
             type: new GraphQLNonNull(GraphQLString),
-            description: 'The name of the user',
+            description: 'The name of the user. Required',
         },
         email: {
             type: new GraphQLNonNull(GraphQLString),
-            description: 'The email of the user',
+            description: 'The email of the user. Required',
         },
         password: {
             type: new GraphQLNonNull(GraphQLString),
-            description: 'The password of the user',
+            description: 'The password of the user. Required',
         },
         createdDate: {
-            type: GraphQLString,
-            description: 'The created date of the user',
+            type: new GraphQLNonNull(GraphQLString),
+            description: 'The created date of the user. Required',
         },
     }),
     interfaces: [nodeInterface],

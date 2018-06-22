@@ -1,5 +1,5 @@
 const userQuery = require('./query');
-// const mutation = require('./mutation');
+const userMutation = require('./mutation');
 const UserType = require('./UserType');
 
-module.exports = { userQuery, UserType };
+module.exports = { userQuery, userMutation, UserType };

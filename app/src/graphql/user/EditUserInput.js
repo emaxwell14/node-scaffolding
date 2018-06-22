@@ -1,8 +1,7 @@
 const { GraphQLString, GraphQLInputObjectType, GraphQLNonNull, GraphQLID } = require('graphql/type');
-const StatusEnumType = require('./StatusEnumType');
 
 module.exports = new GraphQLInputObjectType({
-    name: 'EditTaskInput',
+    name: 'EditUserInput',
     fields: () => ({
         clientMutationId: {
             type: new GraphQLNonNull(GraphQLString),
@@ -10,18 +9,19 @@ module.exports = new GraphQLInputObjectType({
         },
         id: {
             type: new GraphQLNonNull(GraphQLID),
-            description: 'The global id of the task. Required',
+            description: 'The global id of the user. Required',
         },
         name: {
             type: GraphQLString,
-            description: 'The name of the task. Not required',
+            description: 'The name of the user',
         },
-        description: {
+        email: {
             type: GraphQLString,
-            description: 'The description of the task. Not required',
+            description: 'The email of the user',
         },
-        status: {
-            type: StatusEnumType,
+        password: {
+            type: GraphQLString,
+            description: 'The password of the user',
         },
     }),
 });

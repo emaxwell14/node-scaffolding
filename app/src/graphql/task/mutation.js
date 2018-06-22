@@ -1,6 +1,6 @@
 const { GraphQLNonNull } = require('graphql/type');
 const { fromGlobalId } = require('graphql-relay');
-const TaskInput = require('./TaskInput');
+const AddTaskInput = require('./AddTaskInput');
 const EditTaskInput = require('./EditTaskInput');
 const TaskPayload = require('./TaskPayload');
 const { Task } = require('../../model/index');
@@ -10,7 +10,7 @@ const addTask = {
     description: 'Add a task',
     args: {
         input: {
-            type: new GraphQLNonNull(TaskInput),
+            type: new GraphQLNonNull(AddTaskInput),
         },
     },
     resolve: (_, { input: { name, description, clientMutationId } }) => {
@@ -27,7 +27,7 @@ const addTask = {
 
 const editTask = {
     type: TaskPayload,
-    description: 'Add a task',
+    description: 'Edit a task',
     args: {
         input: {
             type: new GraphQLNonNull(EditTaskInput),

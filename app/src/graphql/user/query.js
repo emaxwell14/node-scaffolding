@@ -1,4 +1,4 @@
-const { GraphQLNonNull, GraphQLID } = require('graphql/type');
+const { GraphQLNonNull, GraphQLID, GraphQLList } = require('graphql/type');
 const { fromGlobalId } = require('graphql-relay');
 const { User } = require('../../model/index');
 const UserType = require('./UserType');
@@ -21,6 +21,17 @@ const user = {
     },
 };
 
+const users = {
+    name: 'users',
+    description: 'Get all users',
+    type: new GraphQLList(UserType),
+    resolve: () => User.find()
+        .catch(() => {
+            throw new Error('Error searching for users');
+        }),
+};
+
 module.exports = {
     user,
+    users,
 };
