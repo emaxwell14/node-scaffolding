@@ -1,5 +1,5 @@
 const express = require('express');
-const todoRoutes = require('./todoRoutes');
+const taskRoutes = require('./taskRoutes');
 
 module.exports = {
     getRouter,
@@ -13,6 +13,6 @@ function getRouter() {
     const router = express.Router();
 
     router.get('/', getResult);
-    router.use(todoRoutes.getRouter());
+    router.use(taskRoutes.getRouter());
     return router;
 }

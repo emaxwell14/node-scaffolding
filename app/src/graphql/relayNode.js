@@ -1,6 +1,6 @@
 
 const { nodeDefinitions, fromGlobalId } = require('graphql-relay');
-const Task = require('../model/Todo');
+const Task = require('../model/Task');
 
 const { nodeInterface, nodeField: node, nodesField: nodes } = nodeDefinitions(
     (globalId) => {

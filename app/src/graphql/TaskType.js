@@ -5,20 +5,20 @@ const StatusEnumType = require('./StatusEnumType');
 
 module.exports = new GraphQLObjectType({
     name: 'Task',
-    description: 'todo item',
+    description: 'Task item',
     fields: () => ({
         id: globalIdField('task'),
         name: {
             type: GraphQLString,
-            description: 'The name of the todo.',
+            description: 'The name of the task.',
         },
         description: {
             type: GraphQLString,
-            description: 'The description of the todo.',
+            description: 'The description of the task.',
         },
         createdDate: {
             type: GraphQLString,
-            description: 'The created date of the todo',
+            description: 'The created date of the task',
         },
         status: {
             type: StatusEnumType,

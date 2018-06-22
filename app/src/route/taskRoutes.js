@@ -1,5 +1,5 @@
 const express = require('express');
-const todoService = require('../service/todoService');
+const taskService = require('../service/taskService');
 
 module.exports = {
     getRouter,
@@ -9,13 +9,13 @@ module.exports = {
 function getRouter() {
     const router = express.Router();
 
-    router.get('/tasks', todoService.getAll);
-    router.post('/tasks', todoService.create);
+    router.get('/tasks', taskService.getAll);
+    router.post('/tasks', taskService.create);
 
     router.route('/tasks/:taskId')
-        .get(todoService.getOne)
-        .put(todoService.update)
-        .delete(todoService.remove);
+        .get(taskService.getOne)
+        .put(taskService.update)
+        .delete(taskService.remove);
 
     return router;
 }
