@@ -1,50 +1,76 @@
-const { GraphQLNonNull } = require('graphql/type');
-const { fromGlobalId } = require('graphql-relay');
-const AddUserInput = require('./AddUserInput');
-const EditTaskInput = require('./EditUserInput');
-const UserPayload = require('./UserPayload');
+const { GraphQLNonNull, GraphQLString, GraphQLID } = require('graphql/type');
+const { fromGlobalId, mutationWithClientMutationId } = require('graphql-relay');
+const UserType = require('./UserType');
 const { User } = require('../../model');
 
-const addUser = {
-    type: UserPayload,
+const addUser = mutationWithClientMutationId({
+    name: 'addUser',
     description: 'Add a user',
-    args: {
-        input: {
-            type: new GraphQLNonNull(AddUserInput),
+    inputFields: {
+        name: {
+            type: new GraphQLNonNull(GraphQLString),
+            description: 'The name of the user. Required',
+        },
+        email: {
+            type: new GraphQLNonNull(GraphQLString),
+            description: 'The email of the user. Required',
+        },
+        password: {
+            type: new GraphQLNonNull(GraphQLString),
+            description: 'The password of the user. Required',
         },
     },
-    resolve: (_, { input: { name, email, password, clientMutationId } }) => {
+    outputFields: {
+        user: {
+            type: new GraphQLNonNull(UserType),
+            description: 'The user that is created. Required',
+        },
+    },
+    mutateAndGetPayload: ({ name, email, password }) => {
         const createdUser = new User({ name, email, password });
-
-        return User.create(createdUser).then(user => ({
-            clientMutationId,
-            user,
-        })).catch(() => {
-            throw new Error('Error creating user');
-        });
+        return User.create(createdUser)
+            .catch(() => {
+                throw new Error('Error creating user');
+            });
     },
-};
+});
 
-const editUser = {
-    type: UserPayload,
+const editUser = mutationWithClientMutationId({
+    name: 'editUser',
     description: 'Edit a user',
-    args: {
-        input: {
-            type: new GraphQLNonNull(EditTaskInput),
+    inputFields: {
+        id: {
+            type: new GraphQLNonNull(GraphQLID),
+            description: 'The global id of the user. Required',
+        },
+        name: {
+            type: GraphQLString,
+            description: 'The name of the user',
+        },
+        email: {
+            type: GraphQLString,
+            description: 'The email of the user',
+        },
+        password: {
+            type: GraphQLString,
+            description: 'The password of the user',
         },
     },
-    resolve: (_, { input: { id, name, description, status, clientMutationId } }) => {
-        const { id: _id } = fromGlobalId(id);
-        const userToEdit = new User({ _id, name, description, status });
-
-        return User.findOneAndUpdate({ _id }, userToEdit, { new: true }).then(user => ({
-            clientMutationId,
-            user,
-        })).catch(() => {
-            throw new Error('Error editing user');
-        });
+    outputFields: {
+        user: {
+            type: new GraphQLNonNull(UserType),
+            description: 'The user that is updated. Required',
+        },
     },
-};
+    mutateAndGetPayload: ({ id, name, email, password }) => {
+        const { id: _id } = fromGlobalId(id);
+        const userToEdit = new User({ _id, name, email, password });
+        return User.findOneAndUpdate({ _id }, userToEdit, { new: true })
+            .catch(() => {
+                throw new Error('Error editing user');
+            });
+    },
+});
 
 
 module.exports = {
