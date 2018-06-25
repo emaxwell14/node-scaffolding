@@ -1,5 +1,5 @@
 const { nodeDefinitions, fromGlobalId } = require('graphql-relay');
-const { Task, User } = require('../model/index');
+const { Task, User } = require('../model');
 
 const { nodeInterface, nodeField: node, nodesField: nodes } = nodeDefinitions(
     (globalId) => {
@@ -18,9 +18,9 @@ const { nodeInterface, nodeField: node, nodesField: nodes } = nodeDefinitions(
         switch (getType(obj)) {
             /* eslint-disable global-require */
             case 'Task':
-                return require('./task/index').TaskType;
+                return require('./task').TaskType;
             case 'User':
-                return require('./user/index').UserType;
+                return require('./user').UserType;
             default:
                 return null;
             /* eslint-enable */

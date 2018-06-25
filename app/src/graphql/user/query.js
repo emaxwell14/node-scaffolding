@@ -1,6 +1,6 @@
 const { GraphQLNonNull, GraphQLID, GraphQLList } = require('graphql/type');
 const { fromGlobalId } = require('graphql-relay');
-const { User } = require('../../model/index');
+const { User } = require('../../model');
 const UserType = require('./UserType');
 
 const user = {

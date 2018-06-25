@@ -1,7 +1,7 @@
 const { GraphQLNonNull, GraphQLID } = require('graphql/type');
 const { fromGlobalId, connectionArgs } = require('graphql-relay');
 const uuidv4 = require('uuid/v4');
-const { Task } = require('../../model/index');
+const { Task } = require('../../model');
 const TaskType = require('./TaskType');
 const TaskConnection = require('./TaskConnection');
 

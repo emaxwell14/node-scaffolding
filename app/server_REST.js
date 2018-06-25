@@ -4,9 +4,9 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const chalk = require('chalk');
 const dbService = require('./databaseService');
-const api = require('./src/route/index');
+const api = require('./src/route');
 require('mongoose');
-require('./src/model/index');
+require('./src/model');
 
 const app = express();
 const router = express.Router();
