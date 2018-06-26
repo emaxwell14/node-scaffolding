@@ -23,16 +23,13 @@ const task = {
     },
 };
 
-const tasks = {
-    name: 'tasks',
-    description: 'Get all tasks',
-    type: TaskConnection,
-    args: connectionArgs,
-    resolve: (root, { after, before, first, last }) => {
-        // If field of a previous query, use id to get tasks
-        const query = root ? Task.find({ userId: root._id }) : Task.find({});
-
-        return query.then((data) => {
+const abstractPagination = (collection, query, { first, last, before, after }) =>
+    collection.count(query).then((count) => {
+        const queryWithOptions = collection.find(query);
+        if (first) {
+            queryWithOptions.limit(first);
+        }
+        return queryWithOptions.then((data) => {
             const edges = data.map(node => ({
                 cursor: uuidv4(),
                 node,
@@ -47,7 +44,20 @@ const tasks = {
                     hasNextPage: false,
                 },
             };
-        }).catch(() => {
+        });
+    });
+
+const tasks = {
+    name: 'tasks',
+    description: 'Get all tasks',
+    type: TaskConnection,
+    args: connectionArgs,
+    resolve: (root, args) => {
+        // If field of a previous query, use id to get tasks
+        // TODO create a separate connection for this in user query. After pagination is extracted
+        const query = root ? { userId: root._id } : {};
+
+        return abstractPagination(Task, query, args).catch(() => {
             throw new Error('Error searching for tasks');
         });
     },
