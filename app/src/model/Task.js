@@ -19,6 +19,10 @@ const TaskSchema = new Schema({
         enum: ['pending', 'ongoing', 'completed'],
         default: 'pending',
     },
+    userId: {
+        type: Schema.Types.ObjectId,
+        required: 'Please enter the id of the user creating the task',
+    },
     // Used for graphql node query
     type: {
         type: String,

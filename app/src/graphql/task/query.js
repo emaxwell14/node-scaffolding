@@ -28,8 +28,11 @@ const tasks = {
     description: 'Get all tasks',
     type: TaskConnection,
     args: connectionArgs,
-    resolve: (_, { after, before, first, last }) =>
-        Task.find({}).then((data) => {
+    resolve: (root, { after, before, first, last }) => {
+        // If field of a previous query, use id to get tasks
+        const query = root ? Task.find({ userId: root._id }) : Task.find({});
+
+        return query.then((data) => {
             const edges = data.map(node => ({
                 cursor: uuidv4(),
                 node,
@@ -46,7 +49,8 @@ const tasks = {
             };
         }).catch(() => {
             throw new Error('Error searching for tasks');
-        }),
+        });
+    },
 };
 
 module.exports = {

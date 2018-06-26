@@ -16,6 +16,10 @@ const addTask = mutationWithClientMutationId({
             type: GraphQLString,
             description: 'The description of the task',
         },
+        userId: {
+            type: new GraphQLNonNull(GraphQLID),
+            description: 'The global id of the user creating the task. Required',
+        },
     },
     outputFields: {
         task: {
@@ -23,8 +27,9 @@ const addTask = mutationWithClientMutationId({
             description: 'The task that is created. Required',
         },
     },
-    mutateAndGetPayload: ({ name, description }) => {
-        const createdTask = new Task({ name, description });
+    mutateAndGetPayload: ({ name, description, userId: globalUserId }) => {
+        const { id: userId } = fromGlobalId(globalUserId);
+        const createdTask = new Task({ name, description, userId });
 
         return Task.create(createdTask)
             .then(task => ({ task }))
@@ -60,7 +65,7 @@ const editTask = mutationWithClientMutationId({
             description: 'The task that is created. Required',
         },
     },
-    mutateAndGetPayload: (_, { input: { id, name, description, status } }) => {
+    mutateAndGetPayload: ({ id, name, description, status }) => {
         const { id: _id } = fromGlobalId(id);
         const taskToEdit = new Task({ _id, name, description, status });
 

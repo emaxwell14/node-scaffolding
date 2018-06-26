@@ -23,6 +23,7 @@ module.exports = new GraphQLObjectType({
         status: {
             type: StatusEnumType,
         },
+        userId: globalIdField('user'),
     }),
     interfaces: [nodeInterface],
 });
