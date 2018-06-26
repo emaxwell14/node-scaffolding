@@ -24,11 +24,13 @@ const addUser = mutationWithClientMutationId({
         user: {
             type: new GraphQLNonNull(UserType),
             description: 'The user that is created. Required',
+            // resolve: payload => payload, // Pass result directly or use then in mutate
         },
     },
     mutateAndGetPayload: ({ name, email, password }) => {
         const createdUser = new User({ name, email, password });
         return User.create(createdUser)
+            .then(user => ({ user }))
             .catch(() => {
                 throw new Error('Error creating user');
             });
@@ -66,6 +68,7 @@ const editUser = mutationWithClientMutationId({
         const { id: _id } = fromGlobalId(id);
         const userToEdit = new User({ _id, name, email, password });
         return User.findOneAndUpdate({ _id }, userToEdit, { new: true })
+            .then(user => ({ user }))
             .catch(() => {
                 throw new Error('Error editing user');
             });
