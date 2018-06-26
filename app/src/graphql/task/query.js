@@ -23,29 +23,43 @@ const task = {
     },
 };
 
-const abstractPagination = (collection, query, { first, last, before, after }) =>
-    collection.count(query).then((count) => {
+const abstractPagination = (collection, query, { first, last, before, after }) => {
+    if (first && last) {
+        throw new Error('"first" and "last" cannot be present at same time');
+    }
+    if (before && after) {
+        throw new Error('"before" and "after" cannot be present at same time');
+    }
+
+    return collection.count(query).then((count) => {
         const queryWithOptions = collection.find(query);
         if (first) {
             queryWithOptions.limit(first);
         }
+
+        if (last) {
+            queryWithOptions.skip(count - last);
+        }
+
         return queryWithOptions.then((data) => {
             const edges = data.map(node => ({
                 cursor: uuidv4(),
                 node,
             }));
 
+            // TODO additional data not in result
             return {
                 edges,
-                totalCount: edges.length,
+                totalCount: count,
                 pageInfo: {
                     cursor: edges[edges.length - 1].cursor,
-                    hasPreviousPage: false,
-                    hasNextPage: false,
+                    hasPreviousPage: Boolean(first && count > first),
+                    hasNextPage: Boolean(last && count > last),
                 },
             };
         });
     });
+};
 
 const tasks = {
     name: 'tasks',
