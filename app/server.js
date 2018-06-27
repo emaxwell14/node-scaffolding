@@ -4,7 +4,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const schema = require('./src/graphql/schema');
 const dbService = require('./databaseService');
-const logger = require('./src/utils/logger');
+const { logger } = require('./src/utils');
 const configurationService = require('./src/service/configurationService');
 
 const PORT = configurationService.getServerPort();

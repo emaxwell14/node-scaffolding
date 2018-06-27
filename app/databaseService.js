@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 const mongoose = require('mongoose');
-const logger = require('./src/utils/logger');
+const { logger } = require('./src/utils');
 const configurationService = require('./src/service/configurationService');
 
 function init() {
