@@ -33,8 +33,8 @@ const addTask = mutationWithClientMutationId({
 
         return Task.create(createdTask)
             .then(task => ({ task }))
-            .catch(() => {
-                throw new Error('Error creating task');
+            .catch((e) => {
+                throw new Error(`Error creating task: ${e.message}`);
             });
     },
 });
@@ -71,8 +71,8 @@ const editTask = mutationWithClientMutationId({
 
         return Task.findOneAndUpdate({ _id }, taskToEdit, { new: true })
             .then(task => ({ task }))
-            .catch(() => {
-                throw new Error('Error editing task');
+            .catch((e) => {
+                throw new Error(`Error editing task: ${e.message}`);
             });
     },
 });

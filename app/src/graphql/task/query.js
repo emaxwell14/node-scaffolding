@@ -17,8 +17,8 @@ const task = {
     resolve: (root, { id }) => {
         const { id: _id } = fromGlobalId(id);
         return Task.findById({ _id })
-            .catch(() => {
-                throw new Error(`Error searching for task with id ${_id}`);
+            .catch((e) => {
+                throw new Error(`Error searching for task with id ${_id}: ${e.message}`);
             });
     },
 };
@@ -28,15 +28,10 @@ const tasks = {
     description: 'Get all tasks',
     type: TaskConnection,
     args: connectionArgs,
-    resolve: (root, args) => {
-        // If field of a previous query, use id to get tasks
-        // TODO create a separate connection for this in user query. After pagination is extracted
-        const query = root ? { userId: root._id } : {};
-
-        return getPaginatedCollection(Task, query, {}, args).catch(() => {
-            throw new Error('Error searching for tasks');
-        });
-    },
+    resolve: (root, args) =>
+        getPaginatedCollection(Task, {}, {}, args).catch((e) => {
+            throw new Error(`Error searching for tasks: ${e.message}`);
+        }),
 };
 
 module.exports = {

@@ -15,8 +15,8 @@ const user = {
     resolve: (root, { id }) => {
         const { id: _id } = fromGlobalId(id);
         return User.findById({ _id })
-            .catch(() => {
-                throw new Error(`Error searching for user with id ${_id}`);
+            .catch((e) => {
+                throw new Error(`Error searching for user with id ${_id}: ${e.message}`);
             });
     },
 };

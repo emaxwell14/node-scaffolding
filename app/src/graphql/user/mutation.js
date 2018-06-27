@@ -31,8 +31,8 @@ const addUser = mutationWithClientMutationId({
         const createdUser = new User({ name, email, password });
         return User.create(createdUser)
             .then(user => ({ user }))
-            .catch(() => {
-                throw new Error('Error creating user');
+            .catch((e) => {
+                throw new Error(`Error creating user: ${e.message}`);
             });
     },
 });
@@ -69,8 +69,8 @@ const editUser = mutationWithClientMutationId({
         const userToEdit = new User({ _id, name, email, password });
         return User.findOneAndUpdate({ _id }, userToEdit, { new: true })
             .then(user => ({ user }))
-            .catch(() => {
-                throw new Error('Error editing user');
+            .catch((e) => {
+                throw new Error(`Error editing user: ${e.message}`);
             });
     },
 });
