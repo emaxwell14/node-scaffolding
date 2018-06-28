@@ -1,7 +1,7 @@
 const { GraphQLNonNull, GraphQLString, GraphQLID } = require('graphql/type');
 const { fromGlobalId, mutationWithClientMutationId } = require('graphql-relay');
 const UserType = require('./UserType');
-const { User } = require('../../model');
+const { User, Task } = require('../../model');
 
 const addUser = mutationWithClientMutationId({
     name: 'addUser',
@@ -75,8 +75,33 @@ const editUser = mutationWithClientMutationId({
     },
 });
 
+const deleteUser = mutationWithClientMutationId({
+    name: 'deleteUser',
+    description: 'Delete a user',
+    inputFields: {
+        id: {
+            type: new GraphQLNonNull(GraphQLID),
+            description: 'The global id of the user. Required',
+        },
+    },
+    mutateAndGetPayload: ({ id }) => {
+        const { id: _id } = fromGlobalId(id);
+        return User.deleteOne({ _id })
+            .then(({ n: wasDeleted }) => {
+                if (wasDeleted) {
+                    return Task.deleteOne({ userId: _id });
+                }
+                throw new Error(`User with id ${_id} not found`);
+            })
+            .catch((e) => {
+                throw new Error(`Error deleting user: ${e.message}`);
+            });
+    },
+});
+
 
 module.exports = {
     addUser,
     editUser,
+    deleteUser,
 };

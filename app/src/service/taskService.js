@@ -51,7 +51,7 @@ function update(req, res) {
 
 
 function remove(req, res) {
-    Task.remove({ _id: req.params.taskId }, (err) => {
+    Task.deleteOne({ _id: req.params.taskId }, (err) => {
         if (err) {
             res.send(err);
         }
