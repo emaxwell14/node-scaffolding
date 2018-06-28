@@ -1,4 +1,4 @@
-const { GraphQLNonNull, GraphQLID } = require('graphql/type');
+const { GraphQLNonNull, GraphQLID, GraphQLString } = require('graphql/type');
 const { fromGlobalId, connectionArgs } = require('graphql-relay');
 const { User } = require('../../model');
 const UserType = require('./UserType');
@@ -34,7 +34,41 @@ const users = {
         }),
 };
 
+const userLogin = {
+    name: 'userLogin',
+    description: 'Verify the users username/email and password',
+    type: UserType,
+    args: {
+        userName: {
+            type: new GraphQLNonNull(GraphQLString),
+            description: 'The name or email of the user. Requireds',
+        },
+        password: {
+            type: new GraphQLNonNull(GraphQLString),
+            description: 'The password of the user. Required',
+        },
+    },
+    resolve: (root, { userName, password }) =>
+        User.findOne({
+            $or: [
+                { name: userName },
+                { email: userName },
+            ],
+        }).then((data) => {
+            if (data === null) {
+                throw new Error(`User "${userName}" not found`);
+            }
+            if (data.password !== password) {
+                throw new Error(`Password incorrect for user "${userName}"`);
+            }
+            return data;
+        }).catch((e) => {
+            throw new Error(`Error searching for user "${userName}". ${e.message}`);
+        }),
+};
+
 module.exports = {
     user,
     users,
+    userLogin,
 };
