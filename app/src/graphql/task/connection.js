@@ -1,6 +1,6 @@
 const { connectionArgs } = require('graphql-relay');
 const { Task } = require('../../model');
-const { TaskConnection } = require('../task');
+const TaskConnection = require('./TaskConnection');
 const { paginate: { getPaginatedCollection } } = require('../../utils');
 
 const userTasks = {

@@ -1,6 +1,6 @@
 const taskQuery = require('./query');
 const taskMutation = require('./mutation');
+const connection = require('./connection');
 const TaskType = require('./TaskType');
-const TaskConnection = require('./TaskConnection');
 
-module.exports = { taskQuery, taskMutation, TaskType, TaskConnection };
+module.exports = { taskQuery, taskMutation, connection, TaskType };

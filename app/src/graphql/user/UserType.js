@@ -1,7 +1,7 @@
 const { GraphQLObjectType, GraphQLString, GraphQLNonNull } = require('graphql/type');
 const { globalIdField } = require('graphql-relay');
 const { nodeInterface } = require('../relayNode');
-const { userTasks } = require('./connection');
+const { connection: { userTasks } } = require('../task');
 
 module.exports = new GraphQLObjectType({
     name: 'User',
