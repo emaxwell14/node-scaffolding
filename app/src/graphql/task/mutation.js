@@ -77,8 +77,27 @@ const editTask = mutationWithClientMutationId({
     },
 });
 
+const deleteTask = mutationWithClientMutationId({
+    name: 'deleteTask',
+    description: 'Delete a task',
+    inputFields: {
+        id: {
+            type: new GraphQLNonNull(GraphQLID),
+            description: 'The global id of the task. Required',
+        },
+    },
+    mutateAndGetPayload: ({ id }) => {
+        const { id: _id } = fromGlobalId(id);
+        return Task.deleteOne({ _id })
+            .catch((e) => {
+                throw new Error(`Error deleting task: ${e.message}`);
+            });
+    },
+});
+
 
 module.exports = {
     addTask,
     editTask,
+    deleteTask,
 };

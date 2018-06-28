@@ -89,7 +89,7 @@ const getPaginatedCollection = (collection, query, projection, paginationArgs) =
                 edges,
                 totalCount: count,
                 pageInfo: {
-                    cursor: edges[edges.length - 1].cursor,
+                    cursor: edges[edges.length - 1] && edges[edges.length - 1].cursor,
                     hasPreviousPage: Boolean(paginationArgs.first && count > paginationArgs.first),
                     hasNextPage: Boolean(paginationArgs.last && count > paginationArgs.last),
                 },
