@@ -20,6 +20,9 @@ const addTask = mutationWithClientMutationId({
             type: new GraphQLNonNull(GraphQLID),
             description: 'The global id of the user creating the task. Required',
         },
+        status: {
+            type: StatusEnumType,
+        },
     },
     outputFields: {
         task: {

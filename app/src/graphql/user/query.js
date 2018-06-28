@@ -1,7 +1,9 @@
-const { GraphQLNonNull, GraphQLID, GraphQLList } = require('graphql/type');
-const { fromGlobalId } = require('graphql-relay');
+const { GraphQLNonNull, GraphQLID } = require('graphql/type');
+const { fromGlobalId, connectionArgs } = require('graphql-relay');
 const { User } = require('../../model');
 const UserType = require('./UserType');
+const UserConnection = require('./UserConnection');
+const { paginate: { getPaginatedCollection } } = require('../../utils');
 
 const user = {
     name: 'user',
@@ -24,10 +26,11 @@ const user = {
 const users = {
     name: 'users',
     description: 'Get all users',
-    type: new GraphQLList(UserType),
-    resolve: () => User.find()
-        .catch(() => {
-            throw new Error('Error searching for users');
+    type: UserConnection,
+    args: connectionArgs,
+    resolve: (root, args) =>
+        getPaginatedCollection(User, {}, {}, args).catch((e) => {
+            throw new Error(`Error searching for users: ${e.message}`);
         }),
 };
 
