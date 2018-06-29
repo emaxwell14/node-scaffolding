@@ -3,6 +3,7 @@ const { fromGlobalId, mutationWithClientMutationId } = require('graphql-relay');
 const TaskType = require('./TaskType');
 const StatusEnumType = require('./StatusEnumType');
 const { Task } = require('../../model');
+const { AuthenticationError } = require('../../errors');
 
 const addTask = mutationWithClientMutationId({
     name: 'addTask',
@@ -30,7 +31,10 @@ const addTask = mutationWithClientMutationId({
             description: 'The task that is created. Required',
         },
     },
-    mutateAndGetPayload: ({ name, description, userId: globalUserId }) => {
+    mutateAndGetPayload: ({ name, description, userId: globalUserId }, { user }) => {
+        if (!user) {
+            throw new AuthenticationError();
+        }
         const { id: userId } = fromGlobalId(globalUserId);
         const createdTask = new Task({ name, description, userId });
 
@@ -68,7 +72,10 @@ const editTask = mutationWithClientMutationId({
             description: 'The task that is created. Required',
         },
     },
-    mutateAndGetPayload: ({ id, name, description, status }) => {
+    mutateAndGetPayload: ({ id, name, description, status }, { user }) => {
+        if (!user) {
+            throw new AuthenticationError();
+        }
         const { id: _id } = fromGlobalId(id);
         const taskToEdit = new Task({ _id, name, description, status });
 
@@ -89,7 +96,10 @@ const deleteTask = mutationWithClientMutationId({
             description: 'The global id of the task. Required',
         },
     },
-    mutateAndGetPayload: ({ id }) => {
+    mutateAndGetPayload: ({ id }, { user }) => {
+        if (!user) {
+            throw new AuthenticationError();
+        }
         const { id: _id } = fromGlobalId(id);
         return Task.deleteOne({ _id })
             .catch((e) => {

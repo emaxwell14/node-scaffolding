@@ -1,10 +1,10 @@
 
-class AuthentificationError extends Error {
-    constructor(message = 'User is not authenticated.') {
-        super(message);
+class AuthenticationError extends Error {
+    constructor() {
+        super('User is not authenticated.');
         this.type = 'AUTHENTIFICATION';
     }
 }
 
-module.exports = AuthentificationError;
+module.exports = AuthenticationError;
 

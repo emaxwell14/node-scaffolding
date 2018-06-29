@@ -4,7 +4,7 @@ const { Task } = require('../../model');
 const TaskType = require('./TaskType');
 const TaskConnection = require('./TaskConnection');
 const { paginate: { getPaginatedCollection } } = require('../../utils');
-const { AuthentificationError } = require('../../errors');
+const { AuthenticationError } = require('../../errors');
 
 const task = {
     name: 'task',
@@ -17,7 +17,7 @@ const task = {
     },
     resolve: (root, { id }, { user }) => {
         if (!user) {
-            throw new AuthentificationError();
+            throw new AuthenticationError();
         }
         const { id: _id } = fromGlobalId(id);
         return Task.findById({ _id })
@@ -34,7 +34,7 @@ const tasks = {
     args: connectionArgs,
     resolve: (root, args, { user }) => {
         if (!user) {
-            throw new AuthentificationError();
+            throw new AuthenticationError();
         }
 
         return getPaginatedCollection(Task, {}, {}, args).catch((e) => {
