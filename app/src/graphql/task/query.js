@@ -4,6 +4,7 @@ const { Task } = require('../../model');
 const TaskType = require('./TaskType');
 const TaskConnection = require('./TaskConnection');
 const { paginate: { getPaginatedCollection } } = require('../../utils');
+const { AuthentificationError } = require('../../errors');
 
 const task = {
     name: 'task',
@@ -14,7 +15,10 @@ const task = {
             type: new GraphQLNonNull(GraphQLID),
         },
     },
-    resolve: (root, { id }) => {
+    resolve: (root, { id }, { user }) => {
+        if (!user) {
+            throw new AuthentificationError();
+        }
         const { id: _id } = fromGlobalId(id);
         return Task.findById({ _id })
             .catch((e) => {
@@ -28,10 +32,15 @@ const tasks = {
     description: 'Get all tasks',
     type: TaskConnection,
     args: connectionArgs,
-    resolve: (root, args) =>
-        getPaginatedCollection(Task, {}, {}, args).catch((e) => {
+    resolve: (root, args, { user }) => {
+        if (!user) {
+            throw new AuthentificationError();
+        }
+
+        return getPaginatedCollection(Task, {}, {}, args).catch((e) => {
             throw new Error(`Error searching for tasks: ${e.message}`);
-        }),
+        });
+    },
 };
 
 module.exports = {

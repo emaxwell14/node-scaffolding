@@ -13,7 +13,8 @@
     "buildscripts"
   ],
   "env": {
-    "LOG_LEVEL": "debug"
+    "LOG_LEVEL": "debug",
+    "JWT_SECRET": "node-scaffolding-encrypt"
   },
   "options": {
     "extensions": [

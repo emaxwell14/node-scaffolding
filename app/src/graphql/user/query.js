@@ -1,5 +1,7 @@
 const { GraphQLNonNull, GraphQLID, GraphQLString } = require('graphql/type');
 const { fromGlobalId, connectionArgs } = require('graphql-relay');
+// const bcrypt = require('bcrypt');
+const jsonwebtoken = require('jsonwebtoken');
 const { User } = require('../../model');
 const UserType = require('./UserType');
 const UserConnection = require('./UserConnection');
@@ -34,10 +36,10 @@ const users = {
         }),
 };
 
-const userLogin = {
-    name: 'userLogin',
+const login = {
+    name: 'login',
     description: 'Verify the users username/email and password',
-    type: UserType,
+    type: GraphQLString,
     args: {
         userName: {
             type: new GraphQLNonNull(GraphQLString),
@@ -58,10 +60,23 @@ const userLogin = {
             if (data === null) {
                 throw new Error(`User "${userName}" not found`);
             }
+            // TODO
+            //   const valid = await bcrypt.compare(password, user.password)
             if (data.password !== password) {
                 throw new Error(`Password incorrect for user "${userName}"`);
             }
-            return data;
+            const { _id, name, email } = data;
+            return jsonwebtoken.sign(
+                {
+                    _id,
+                    name,
+                    email,
+                },
+                process.env.JWT_SECRET,
+                {
+                    expiresIn: '1d',
+                },
+            );
         }).catch((e) => {
             throw new Error(`Error searching for user "${userName}". ${e.message}`);
         }),
@@ -70,5 +85,5 @@ const userLogin = {
 module.exports = {
     user,
     users,
-    userLogin,
+    login,
 };

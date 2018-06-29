@@ -3,6 +3,7 @@ const { graphqlExpress, graphiqlExpress } = require('apollo-server-express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const schema = require('./src/graphql/schema');
+const jwt = require('express-jwt');
 const dbService = require('./databaseService');
 const { logger } = require('./src/utils');
 const configurationService = require('./src/service/configurationService');
@@ -20,7 +21,13 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(ENDPOINT, graphqlExpress({
+// Not blocking request, jwt just used to put user in context. If not present, will handle authorization in resolver
+const auth = jwt({
+    secret: process.env.JWT_SECRET,
+    credentialsRequired: false,
+});
+
+app.use(ENDPOINT, auth, graphqlExpress(req => ({
     schema,
     debug: true,
     formatError: (error) => {
@@ -33,7 +40,10 @@ app.use(ENDPOINT, graphqlExpress({
             path: error.path,
         };
     },
-}));
+    context: {
+        user: req.user,
+    },
+})));
 
 app.get('/graphiql', graphiqlExpress({
     endpointURL: ENDPOINT,
