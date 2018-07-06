@@ -1,5 +1,6 @@
 const { GraphQLNonNull, GraphQLString, GraphQLID } = require('graphql/type');
 const { fromGlobalId, mutationWithClientMutationId } = require('graphql-relay');
+const bcrypt = require('bcrypt');
 const UserType = require('./UserType');
 const { User, Task } = require('../../model');
 
@@ -27,14 +28,15 @@ const addUser = mutationWithClientMutationId({
             // resolve: payload => payload, // Pass result directly or use then in mutate
         },
     },
-    mutateAndGetPayload: ({ name, email, password }) => {
-        const createdUser = new User({ name, email, password });
-        return User.create(createdUser)
-            .then(user => ({ user }))
-            .catch((e) => {
-                throw new Error(`Error creating user: ${e.message}`);
-            });
-    },
+    mutateAndGetPayload: ({ name, email, password }) =>
+        bcrypt.hash(password, 10).then((encryptedPassword) => {
+            const createdUser = new User({ name, email, password: encryptedPassword });
+            return User.create(createdUser)
+                .then(user => ({ user }))
+                .catch((e) => {
+                    throw new Error(`Error creating user: ${e.message}`);
+                });
+        }),
 });
 
 const editUser = mutationWithClientMutationId({
@@ -65,13 +67,15 @@ const editUser = mutationWithClientMutationId({
         },
     },
     mutateAndGetPayload: ({ id, name, email, password }) => {
-        const { id: _id } = fromGlobalId(id);
-        const userToEdit = new User({ _id, name, email, password });
-        return User.findOneAndUpdate({ _id }, userToEdit, { new: true })
-            .then(user => ({ user }))
-            .catch((e) => {
-                throw new Error(`Error editing user: ${e.message}`);
-            });
+        bcrypt.hash(password, 10).then((encryptedPassword) => {
+            const { id: _id } = fromGlobalId(id);
+            const userToEdit = new User({ _id, name, email, password: encryptedPassword });
+            return User.findOneAndUpdate({ _id }, userToEdit, { new: true })
+                .then(user => ({ user }))
+                .catch((e) => {
+                    throw new Error(`Error editing user: ${e.message}`);
+                });
+        });
     },
 });
 
